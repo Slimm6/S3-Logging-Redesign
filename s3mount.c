@@ -264,11 +264,6 @@ void _do_read(struct state *s, const char *key, void *ptr, size_t len, off_t off
     else {
         s3_get_range(s, key, ptr, len, offset);
     }
-    log_operation(&s->log, S3LOG_OP_READ, key,
-                  S3LOG_NO_VERSION, offset,
-                  len, len,
-                  s3log_elapsed_ms(&t0),
-                  S3LOG_OK, S3LOG_CACHE_NA, NULL);
 }
 
 #define CACHE_SIZE 16
@@ -908,7 +903,11 @@ int fs_read(const char *path, char *buf, size_t len, off_t offset,
     long int base = de.off.s.sector*512;
     //_filename = path;
     do_read(s, s->names[de.off.s.object], de.off.s.object, buf, len, base+offset);
-
+    log_operation(&s->log, S3LOG_OP_READ, key,
+                  S3LOG_NO_VERSION, offset,
+                  len, len,
+                  s3log_elapsed_ms(&t0),
+                  S3LOG_OK, S3LOG_CACHE_NA, NULL);
     return len;
 }
 
