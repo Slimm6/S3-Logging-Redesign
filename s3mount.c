@@ -252,11 +252,8 @@ void _do_read(struct state *s, const char *key, void *ptr, size_t len, off_t off
 {
     if (len == 0)
         return;
-#if 0
-    if (s->log_fp)
-        fprintf(s->log_fp, "%s %ld %ld\n", _filename, offset, len);
-#endif
-    
+    struct timeval t0;
+    gettimeofday(&t0, NULL);
     if (s->local) {
         int fd = get_fd(s, key);
         if (pread(fd, ptr, len, offset) < 0) {
@@ -265,10 +262,13 @@ void _do_read(struct state *s, const char *key, void *ptr, size_t len, off_t off
         }
     }
     else {
-        //pthread_mutex_lock(&s->s3_mutex);
         s3_get_range(s, key, ptr, len, offset);
-        //pthread_mutex_unlock(&s->s3_mutex);
     }
+    log_operation(&s->log, S3LOG_OP_READ, key,
+                  S3LOG_NO_VERSION, offset,
+                  len, len,
+                  s3log_elapsed_ms(&t0),
+                  S3LOG_OK, S3LOG_CACHE_NA, NULL);
 }
 
 #define CACHE_SIZE 16
