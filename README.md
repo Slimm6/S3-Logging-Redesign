@@ -98,20 +98,20 @@ The logging is broken up into 3 parts that are implemented within the s3log.c fi
 The log header is formatted as the following:
 
 [LOG_HEADER]
-timestamp
-pid
-hostname
-bucket
-object_key
-mount_point
-local_mode
-use_http
-cache_enabled
-cache_size_mb
-cache_block_size_mb
-nocache_mode
-mount_user
-s3_host
+- timestamp
+- pid
+- hostname
+- bucket
+- object_key
+- mount_point
+- local_mode
+- use_http
+- cache_enabled
+- cache_size_mb
+- cache_block_size_mb
+- nocache_mode
+- mount_user
+- s3_host
 [END_HEADER]
 
 Here you can see all the necessary informatuon about the mount for future use. What mode you are in or if you are using http. All the information needed about the cache is also included in the log header. 
@@ -160,27 +160,27 @@ The final part of the implementation was the creation of the footer, this gives 
 The log footer is formatted as the following:
 
 [STATISTICS]
-mount_duration_seconds
-total_operations
-total_reads
-total_getattr
-total_readdir
-total_readlink
-total_errors
-bytes_read
-bytes_cached
-cache_hits
-cache_misses
-cache_hit_rate
-avg_read_duration_ms
-max_read_duration_ms
-s3_retries_total
-s3_retry_max_consecutive
-most_accessed_version
-least_accessed_version
+- mount_duration_seconds
+- total_operations
+- total_reads
+- total_getattr
+- total_readdir
+- total_readlink
+- total_errors
+- bytes_read
+- bytes_cached
+- cache_hits
+- cache_misses
+- cache_hit_rate
+- avg_read_duration_ms
+- max_read_duration_ms
+- s3_retries_total
+- s3_retry_max_consecutive
+- most_accessed_version
+- least_accessed_version
 [END_STATISTICS]
 
-This catches all the information you would need to know about the
+This catches all the information you would need to know about the most recent mount. Including operations that were performed and how many errored, how many bytes were read and cached alongside the status of the cache. The duration of reads (average and worst case), the number of retires and statistics about the version of the files. It gives an overview of the run in a condensed way.
 
 
 
