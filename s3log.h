@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/time.h>
+#include <pthread.h>
+
 
 #define S3LOG_OP_INIT     "INIT"
 #define S3LOG_OP_READ     "READ"
@@ -28,6 +30,8 @@
 #define S3LOG_NO_VERSION  (-1)
 #define S3LOG_NO_OFFSET   ((off_t)-1)
 #define S3LOG_NO_SIZE     ((size_t)-1)
+
+pthread_mutex_t lock;
 
 /* 
  * log state of the current mount, including the log file pointer and cumulative statistics.

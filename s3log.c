@@ -14,6 +14,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <limits.h>
+#include <pthread.h>
 
 #include "s3log.h"
 
@@ -98,6 +99,7 @@ static void write_header(FILE *fp, const struct s3log_config *cfg)
 int log_open(struct s3log_state *ls, const struct s3log_config *cfg)
 {
     memset(ls, 0, sizeof(*ls));
+    pthread_mutex_init(&ls->lock, NULL);
     if (!cfg->logfile || cfg->logfile[0] == '\0')
         return 0; 
     ls->fp = fopen(cfg->logfile, "w");
@@ -125,6 +127,9 @@ void log_operation(struct s3log_state *ls,
                    const char *cache_status,
                    const char *error)
 {
+    char ts[32];
+    s3log_timestamp(ts, sizeof(ts));
+    pthread_mutex_lock(&ls->lock);
     if (!ls || !ls->fp)
         return;
     ls->n_ops++;
@@ -155,8 +160,6 @@ void log_operation(struct s3log_state *ls,
     ls->sum_duration_ms += (double)duration_ms;
     if (duration_ms > ls->max_duration_ms)
         ls->max_duration_ms = duration_ms;
-    char ts[32];
-    s3log_timestamp(ts, sizeof(ts));
     fprintf(ls->fp, "%s\t", ts);
     fprintf(ls->fp, "%s\t", op_type ? op_type : "-");
     fprintf(ls->fp, "0x%06" PRIx64 "\t", ls->req_id++);
@@ -182,6 +185,7 @@ void log_operation(struct s3log_state *ls,
     fprintf(ls->fp, "%s\t", cache_status ? cache_status : S3LOG_CACHE_NA);
     fprintf(ls->fp, "%s\n", (error && error[0]) ? error : "");
     fflush(ls->fp);
+    pthread_mutex_unlock(&ls->lock);
 }
 
 /*
@@ -239,4 +243,5 @@ void log_close(struct s3log_state *ls)
     write_statistics(ls->fp, ls);
     fclose(ls->fp);
     ls->fp = NULL;
+    pthread_mutex_destroy(&ls->lock);
 }

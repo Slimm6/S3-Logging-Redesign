@@ -349,10 +349,6 @@ void do_read(struct state *s, const char *key, int version, void *ptr, size_t le
         struct timeval t0;
         gettimeofday(&t0, NULL);
         _do_read(s, key, ptr, len, offset);
-        log_operation(&s->log, S3LOG_OP_READ, key, version,
-                      offset, len, len,
-                      s3log_elapsed_ms(&t0),
-                      S3LOG_OK, S3LOG_CACHE_NA, NULL);
         return;
     }
 
@@ -946,7 +942,7 @@ int fs_readlink(const char *path, char *buf, size_t len)
 
     log_operation(&s->log, S3LOG_OP_READLINK, path,
                   (int)de.off.s.object, (off_t)(de.off.s.sector * 512),
-                  len, (size_t)n,
+                  (size_t)n, (size_t)n,
                   s3log_elapsed_ms(&t0), S3LOG_OK, S3LOG_CACHE_NA, NULL);
     return 0;
 }
