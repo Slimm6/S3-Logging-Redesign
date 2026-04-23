@@ -179,7 +179,7 @@ The log footer is formatted as the following:
 
 [END_STATISTICS]
 
-This catches all the information you would need to know about the most recent mount. Including operations that were performed and how many errored, how many bytes were read and cached alongside the status of the cache. The duration of reads (average and worst case), the number of retires and statistics about the version of the files. It gives an overview of the run in a condensed way.
+This catches all the information you would need to know about the most recent mount. Including operations that were performed and how many errored, how many bytes were read and cached alongside the status of the cache. The duration of reads (average and worst case), and the number of retires. It gives an overview of the run in a condensed way.
 
 ## Testing the Logging System
 
