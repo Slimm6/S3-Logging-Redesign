@@ -185,6 +185,9 @@ The log footer is formatted as the following:
 
 This catches all the information you would need to know about the most recent mount. Including operations that were performed and how many errored, how many bytes were read and cached alongside the status of the cache. The duration of reads (average and worst case), the number of retires and statistics about the version of the files. It gives an overview of the run in a condensed way.
 
+## Testing the Logging System
+
+I used local for my testing of the logging system. I used large blocks files to test the failing of the cache and also made sure all information was correct on run. I ran into a few issues when it came to threading and having writes to the log file, this was the main major issue throughout development. Overall, this logging system testing was intuitive due to the nature of it. The writes work as intended and give all of the information as intended, detecting all changes as needed and the statistics are updated as needed in s3mount.c.
 
 
 
