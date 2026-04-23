@@ -3,6 +3,7 @@
 **s3-backup** performs a full or incremental backup of a directory hierarchy to a single S3 object; **s3mount** mounts a backup as a read-only FUSE file system.
 
 ***NOTE***
+
 All information about the Logging System can be found in at the end of the README. The makefile has been adjusted to include everything necessary to use the log. The logging system expands upon the log, making it so it is no longer just the header of a file that gets printed on read.
 
 ## Usage
